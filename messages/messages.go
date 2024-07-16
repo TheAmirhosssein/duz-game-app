@@ -28,15 +28,20 @@ func toCamelCase(snakeStr string) string {
 
 func validateKeys(validKeys []string, mapToCheck *map[string]string) bool {
 	var validKeysCount int
-	for key, value := range *mapToCheck {
+	for key := range *mapToCheck {
 		for _, validKey := range validKeys {
 			if key == validKey {
 				validKeysCount++
 			}
 		}
-		(*mapToCheck)[toCamelCase(key)] = value
+	}
+
+	CamelCaseMap := make(map[string]string)
+	for key, value := range *mapToCheck {
+		CamelCaseMap[toCamelCase(key)] = value
 		delete(*mapToCheck, key)
 	}
+	*mapToCheck = CamelCaseMap
 	return validKeysCount == len(validKeys)
 }
 

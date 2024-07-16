@@ -1,6 +1,9 @@
 package match
 
 import (
+	"errors"
+	"strconv"
+
 	"github.com/TheAmirhosssein/duz-game-app/client"
 )
 
@@ -13,7 +16,8 @@ type Match struct {
 
 func New(player client.Client) *Match {
 	match := Match{
-		Turn: "X",
+		Turn:  "X",
+		Moves: make(map[string]string),
 	}
 	if playerIcon() == "X" {
 		match.XPlayer = &player
@@ -33,4 +37,34 @@ func (match *Match) SetSecondPlayer(player client.Client) {
 	message := "game started"
 	match.OPlayer.SendMessageToClient([]byte(message))
 	match.XPlayer.SendMessageToClient([]byte(message))
+}
+
+func (match *Match) Move(player client.Client, square string) error {
+	turnUser := match.getTurnUser()
+	if turnUser.UserId != player.UserId {
+		return errors.New("it's not your turn")
+	}
+	squareNumber, err := strconv.ParseInt(square, 10, 0)
+	if err != nil || 1 > squareNumber || squareNumber > 9 {
+		return errors.New("invalid square number")
+	}
+	match.Moves[square] = match.Turn
+	match.changeTurn()
+	return nil
+}
+
+func (match *Match) getTurnUser() client.Client {
+	if match.Turn == "X" {
+		return *match.XPlayer
+	} else {
+		return *match.OPlayer
+	}
+}
+
+func (match *Match) changeTurn() {
+	if match.Turn == "X" {
+		match.Turn = "O"
+	} else {
+		match.Turn = "X"
+	}
 }
