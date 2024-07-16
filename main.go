@@ -29,7 +29,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			log.Println("Read:", err)
 			break
 		}
-		messageTypeJson, err := messages.GetMessageType(message)
+		messageTypeJson, err := messages.GetMessageType(&message)
 		if err != nil {
 			err = conn.WriteMessage(messageType, []byte(err.Error()))
 			if err != nil {
@@ -37,7 +37,14 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		fmt.Println(messageTypeJson)
+		if messageTypeJson == "join_match" {
+			matchData, err := messages.ParseMessageForMatch(message)
+			if err != nil {
+				conn.WriteMessage(messageType, []byte(err.Error()))
+			} else {
+				fmt.Println(matchData)
+			}
+		}
 	}
 }
 
