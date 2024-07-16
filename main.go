@@ -40,7 +40,19 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if messageTypeJson == "join_match" {
-			matchData, err := messages.ParseMessageForMatch(message)
+			validKeys := []string{"game_id", "user_id"}
+			matchData, err := messages.ParseMessage(validKeys, message)
+			if err != nil {
+				conn.WriteMessage(messageType, []byte(err.Error()))
+			} else {
+				id := r.URL.Query().Get("id")
+				client := client.New(id, matchData["userId"], conn)
+				game.JoinGame(matchData["gameId"], *client)
+			}
+		}
+		if messageTypeJson == "move" {
+			validKeys := []string{"square"}
+			matchData, err := messages.ParseMessage(validKeys, message)
 			if err != nil {
 				conn.WriteMessage(messageType, []byte(err.Error()))
 			} else {

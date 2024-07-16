@@ -7,7 +7,7 @@ import (
 )
 
 func isValidType(checkType string) bool {
-	validTypes := [1]string{"join_match"}
+	validTypes := [2]string{"join_match", "move"}
 	for _, validType := range validTypes {
 		if checkType == validType {
 			return true
@@ -52,8 +52,7 @@ func GetMessageType(message *[]byte) (string, error) {
 	return messageType, nil
 }
 
-func ParseMessageForMatch(message []byte) (map[string]string, error) {
-	validKeys := []string{"game_id", "user_id"}
+func ParseMessage(validKeys []string, message []byte) (map[string]string, error) {
 	result := make(map[string]string)
 	json.Unmarshal(message, &result)
 	if !validateKeys(validKeys, &result) {
