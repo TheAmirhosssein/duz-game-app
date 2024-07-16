@@ -1,31 +1,35 @@
 package match
 
-import "math/rand"
+import (
+	"math/rand"
+
+	"github.com/TheAmirhosssein/duz-game-app/client"
+)
 
 type Match struct {
-	OPlayer string
-	XPlayer string
+	OPlayer *client.Client
+	XPlayer *client.Client
 	Turn    string
 	Moves   map[string]string
 }
 
-func New(firstPlayer string) *Match {
+func New(player client.Client) *Match {
 	match := Match{
 		Turn: "X",
 	}
 	if playerIcon() == "X" {
-		match.XPlayer = firstPlayer
+		match.XPlayer = &player
 	} else {
-		match.OPlayer = firstPlayer
+		match.OPlayer = &player
 	}
 	return &match
 }
 
-func (match *Match) SetSecondPlayer(player string) {
-	if match.OPlayer == "" {
-		match.OPlayer = player
+func (match *Match) SetSecondPlayer(player client.Client) {
+	if match.OPlayer == nil {
+		match.OPlayer = &player
 	} else {
-		match.XPlayer = player
+		match.XPlayer = &player
 	}
 }
 

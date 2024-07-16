@@ -1,16 +1,17 @@
 package game
 
 import (
+	"github.com/TheAmirhosssein/duz-game-app/client"
 	"github.com/TheAmirhosssein/duz-game-app/match"
 )
 
 var games map[string]*match.Match = make(map[string]*match.Match)
 
-func JoinGame(gameInfo map[string]string) {
-	game := games[gameInfo["gameId"]]
+func JoinGame(gameId string, client client.Client) {
+	game := games[gameId]
 	if game != nil {
-		game.SetSecondPlayer(gameInfo["userId"])
+		game.SetSecondPlayer(client)
 	} else {
-		games[gameInfo["gameId"]] = match.New(gameInfo["userId"])
+		games[gameId] = match.New(client)
 	}
 }

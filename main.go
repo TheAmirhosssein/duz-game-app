@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/TheAmirhosssein/duz-game-app/client"
 	"github.com/TheAmirhosssein/duz-game-app/game"
 	"github.com/TheAmirhosssein/duz-game-app/messages"
 	"github.com/gorilla/websocket"
@@ -43,7 +44,9 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				conn.WriteMessage(messageType, []byte(err.Error()))
 			} else {
-				game.JoinGame(matchData)
+				id := r.URL.Query().Get("id")
+				client := client.New(id, matchData["userId"], conn)
+				game.JoinGame(matchData["gameId"], *client)
 			}
 		}
 	}
