@@ -3,7 +3,6 @@ package match
 import "math/rand"
 
 type Match struct {
-	GameId  string
 	OPlayer string
 	XPlayer string
 	Turn    string
@@ -12,7 +11,7 @@ type Match struct {
 
 func New(gameId, firstPlayer string) *Match {
 	match := Match{
-		GameId: gameId,
+		Turn: "X",
 	}
 	if playerIcon() == "X" {
 		match.XPlayer = firstPlayer
