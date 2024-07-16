@@ -3,6 +3,7 @@ package messages
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 )
 
 func isValidType(checkType string) bool {
@@ -15,14 +16,26 @@ func isValidType(checkType string) bool {
 	return false
 }
 
-func validateKeys(validKeys []string, mapToCheck map[string]string) bool {
+func toCamelCase(snakeStr string) string {
+	parts := strings.Split(snakeStr, "_")
+	for i, part := range parts {
+		if i != 0 && len(part) > 0 {
+			parts[i] = strings.ToUpper(string(part[0])) + part[1:]
+		}
+	}
+	return strings.Join(parts, "")
+}
+
+func validateKeys(validKeys []string, mapToCheck *map[string]string) bool {
 	var validKeysCount int
-	for key := range mapToCheck {
+	for key, value := range *mapToCheck {
 		for _, validKey := range validKeys {
 			if key == validKey {
 				validKeysCount++
 			}
 		}
+		(*mapToCheck)[toCamelCase(key)] = value
+		delete(*mapToCheck, key)
 	}
 	return validKeysCount == len(validKeys)
 }
@@ -43,7 +56,7 @@ func ParseMessageForMatch(message []byte) (map[string]string, error) {
 	validKeys := []string{"game_id", "user_id"}
 	result := make(map[string]string)
 	json.Unmarshal(message, &result)
-	if !validateKeys(validKeys, result) {
+	if !validateKeys(validKeys, &result) {
 		return nil, errors.New("json is invalid")
 	}
 	return result, nil

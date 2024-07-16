@@ -9,7 +9,7 @@ type Match struct {
 	Moves   map[string]string
 }
 
-func New(gameId, firstPlayer string) *Match {
+func New(firstPlayer string) *Match {
 	match := Match{
 		Turn: "X",
 	}
@@ -19,6 +19,14 @@ func New(gameId, firstPlayer string) *Match {
 		match.OPlayer = firstPlayer
 	}
 	return &match
+}
+
+func (match *Match) SetSecondPlayer(player string) {
+	if match.OPlayer == "" {
+		match.OPlayer = player
+	} else {
+		match.XPlayer = player
+	}
 }
 
 func playerIcon() string {
