@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/TheAmirhosssein/duz-game-app/messages"
 	"github.com/gorilla/websocket"
 )
 
@@ -28,12 +29,15 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			log.Println("Read:", err)
 			break
 		}
-		log.Printf("Received: %s", message)
-		err = conn.WriteMessage(messageType, message)
+		messageTypeJson, err := messages.GetMessageType(message)
 		if err != nil {
-			log.Println("Write:", err)
-			break
+			err = conn.WriteMessage(messageType, []byte(err.Error()))
+			if err != nil {
+				log.Println("Write:", err)
+				break
+			}
 		}
+		fmt.Println(messageTypeJson)
 	}
 }
 
