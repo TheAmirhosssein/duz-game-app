@@ -1,8 +1,6 @@
 package match
 
 import (
-	"math/rand"
-
 	"github.com/TheAmirhosssein/duz-game-app/client"
 )
 
@@ -35,13 +33,4 @@ func (match *Match) SetSecondPlayer(player client.Client) {
 	message := "game started"
 	match.OPlayer.SendMessageToClient([]byte(message))
 	match.XPlayer.SendMessageToClient([]byte(message))
-}
-
-func playerIcon() string {
-	randNumber := rand.Int()
-	if randNumber%2 == 0 {
-		return "X"
-	} else {
-		return "O"
-	}
 }
