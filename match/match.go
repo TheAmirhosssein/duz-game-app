@@ -22,6 +22,7 @@ func New(player client.Client) *Match {
 	} else {
 		match.OPlayer = &player
 	}
+	(&player).SendMessageToClient([]byte("waiting for your opponent to become ready"))
 	return &match
 }
 
@@ -31,6 +32,9 @@ func (match *Match) SetSecondPlayer(player client.Client) {
 	} else {
 		match.XPlayer = &player
 	}
+	message := "game started"
+	match.OPlayer.SendMessageToClient([]byte(message))
+	match.XPlayer.SendMessageToClient([]byte(message))
 }
 
 func playerIcon() string {
