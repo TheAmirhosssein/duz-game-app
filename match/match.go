@@ -49,6 +49,9 @@ func (match *Match) Move(player client.Client, square string) error {
 	if err != nil || 1 > squareNumber || squareNumber > 9 {
 		return errors.New("invalid square number")
 	}
+	if match.Moves[square] != "" {
+		return errors.New("square is not empty")
+	}
 	match.Moves[square] = match.Turn
 	match.changeTurn()
 	match.showMoves()

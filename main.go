@@ -70,10 +70,11 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				err = match.Move(*user, matchData["square"])
 				if err != nil {
 					conn.WriteMessage(messageType, []byte(err.Error()))
+				} else {
+					message := fmt.Sprintf("%s selected %v square", turn, matchData["square"])
+					match.XPlayer.SendMessageToClient([]byte(message))
+					match.OPlayer.SendMessageToClient([]byte(message))
 				}
-				message := fmt.Sprintf("%s selected %v square", turn, matchData["square"])
-				match.XPlayer.SendMessageToClient([]byte(message))
-				match.OPlayer.SendMessageToClient([]byte(message))
 			}
 		}
 	}
