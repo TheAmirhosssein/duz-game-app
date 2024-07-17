@@ -58,6 +58,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				conn.WriteMessage(messageType, []byte(err.Error()))
 			} else {
 				match, err := game.GetMatch(matchData["gameId"])
+				turn := match.Turn
 				if err != nil {
 					conn.WriteMessage(messageType, []byte(err.Error()))
 				}
@@ -70,6 +71,9 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 					conn.WriteMessage(messageType, []byte(err.Error()))
 				}
+				message := fmt.Sprintf("%s selected %v square", turn, matchData["square"])
+				match.XPlayer.SendMessageToClient([]byte(message))
+				match.OPlayer.SendMessageToClient([]byte(message))
 			}
 		}
 	}
