@@ -2,6 +2,7 @@ package match
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/TheAmirhosssein/duz-game-app/client"
@@ -34,9 +35,9 @@ func (match *Match) SetSecondPlayer(player client.Client) {
 	} else {
 		match.XPlayer = &player
 	}
-	message := "game started"
-	match.OPlayer.SendMessageToClient([]byte(message))
-	match.XPlayer.SendMessageToClient([]byte(message))
+	message := "game started and your sign is "
+	match.OPlayer.SendMessageToClient([]byte(message + "O"))
+	match.XPlayer.SendMessageToClient([]byte(message + "X"))
 }
 
 func (match *Match) Move(player client.Client, square string) error {
@@ -50,6 +51,7 @@ func (match *Match) Move(player client.Client, square string) error {
 	}
 	match.Moves[square] = match.Turn
 	match.changeTurn()
+	match.showMoves()
 	return nil
 }
 
@@ -66,5 +68,17 @@ func (match *Match) changeTurn() {
 		match.Turn = "O"
 	} else {
 		match.Turn = "X"
+	}
+}
+
+func (match *Match) showMoves() {
+	for counter := 1; counter < 10; counter++ {
+		fmt.Print(match.Moves[fmt.Sprint(counter)])
+		if match.Moves[fmt.Sprint(counter)] == "" {
+			fmt.Print("-")
+		}
+		if counter%3 == 0 {
+			fmt.Print("\n")
+		}
 	}
 }
