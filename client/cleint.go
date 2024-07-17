@@ -7,16 +7,18 @@ import (
 )
 
 type Client struct {
-	ID     string
-	Conn   *websocket.Conn
-	UserId string
+	ID          string
+	Conn        *websocket.Conn
+	UserId      string
+	PawnOnBoard int
 }
 
 func New(id, userId string, conn *websocket.Conn) *Client {
 	return &Client{
-		ID:     id,
-		Conn:   conn,
-		UserId: userId,
+		ID:          id,
+		Conn:        conn,
+		UserId:      userId,
+		PawnOnBoard: 0,
 	}
 }
 
@@ -26,4 +28,12 @@ func (client Client) SendMessageToClient(message []byte) {
 		fmt.Println("Write error:", err)
 		client.Conn.Close()
 	}
+}
+
+func (client Client) MaxMove() bool {
+	return client.PawnOnBoard == 3
+}
+
+func (client *Client) MovedPawn() {
+	client.PawnOnBoard++
 }

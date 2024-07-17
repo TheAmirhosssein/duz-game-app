@@ -67,13 +67,18 @@ func echo(w http.ResponseWriter, r *http.Request) {
 					conn.WriteMessage(messageType, []byte(err.Error()))
 					break
 				}
-				err = match.Move(*user, matchData["square"])
-				if err != nil {
-					conn.WriteMessage(messageType, []byte(err.Error()))
+				if user.MaxMove() {
+					user.SendMessageToClient([]byte("you can not move any pawn"))
 				} else {
-					message := fmt.Sprintf("%s selected %v square", turn, matchData["square"])
-					match.XPlayer.SendMessageToClient([]byte(message))
-					match.OPlayer.SendMessageToClient([]byte(message))
+					err = match.Move(*user, matchData["square"])
+					if err != nil {
+						conn.WriteMessage(messageType, []byte(err.Error()))
+					} else {
+						message := fmt.Sprintf("%s selected %v square", turn, matchData["square"])
+						match.XPlayer.SendMessageToClient([]byte(message))
+						match.OPlayer.SendMessageToClient([]byte(message))
+						user.MovedPawn()
+					}
 				}
 			}
 		}
