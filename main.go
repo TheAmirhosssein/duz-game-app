@@ -102,6 +102,9 @@ func echo(w http.ResponseWriter, r *http.Request) {
 					conn.WriteMessage(messageType, []byte("there is no pawn in this square"))
 					continue
 				}
+				match.RemovePawn(matchData["square"])
+				user.RemovedPawn()
+				message = fmt.Sprintf("%s removed %v square", turn, matchData["square"])
 			}
 			match.XPlayer.SendMessageToClient([]byte(message))
 			match.OPlayer.SendMessageToClient([]byte(message))

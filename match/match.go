@@ -41,15 +41,14 @@ func (match *Match) SetSecondPlayer(player client.Client) {
 }
 
 func (match *Match) Move(square string) {
-	match.Moves[square] = ""
+	match.Moves[square] = match.Turn
+	match.changeTurn()
 	match.showMoves()
 }
 
-func (match *Match) RemovePawn(player client.Client, square string) error {
+func (match *Match) RemovePawn(square string) {
 	match.Moves[square] = ""
-	match.changeTurn()
 	match.showMoves()
-	return nil
 }
 
 func (match *Match) getTurnUser() client.Client {
