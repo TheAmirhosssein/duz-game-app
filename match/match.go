@@ -98,3 +98,7 @@ func (match *Match) CheckValidSquareNumber(square string) error {
 func (match *Match) EmptySquare(square string) bool {
 	return match.Moves[square] == ""
 }
+
+func (match *Match) CheckValidRemove(square string) bool {
+	return match.Moves[square] == match.Turn
+}

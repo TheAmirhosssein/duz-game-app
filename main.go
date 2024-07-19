@@ -102,6 +102,10 @@ func echo(w http.ResponseWriter, r *http.Request) {
 					conn.WriteMessage(messageType, []byte("there is no pawn in this square"))
 					continue
 				}
+				if !match.CheckValidRemove(matchData["square"]) {
+					conn.WriteMessage(messageType, []byte("this square is for your opponent"))
+					continue
+				}
 				match.RemovePawn(matchData["square"])
 				user.RemovedPawn()
 				message = fmt.Sprintf("%s removed %v square", turn, matchData["square"])
