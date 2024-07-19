@@ -79,32 +79,32 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				conn.WriteMessage(messageType, []byte(squareNumberError.Error()))
 				continue
 			}
-			squareNumber := match.EmptySquare(matchData["square"])
-			if squareNumber != nil {
-				conn.WriteMessage(messageType, []byte(squareNumber.Error()))
-				continue
-			}
+			var message string
 			if messageTypeJson == "move" {
+				if !match.EmptySquare(matchData["square"]) {
+					conn.WriteMessage(messageType, []byte("square is not empty"))
+					continue
+				}
 				if user.MaxMove() {
 					user.SendMessageToClient([]byte("you can not move any pawn"))
 					continue
 				}
-				err = match.Move(*user, matchData["square"])
-				if err != nil {
-					conn.WriteMessage(messageType, []byte(err.Error()))
-				} else {
-					message := fmt.Sprintf("%s selected %v square", turn, matchData["square"])
-					match.XPlayer.SendMessageToClient([]byte(message))
-					match.OPlayer.SendMessageToClient([]byte(message))
-					user.MovedPawn()
-				}
+				match.Move(matchData["square"])
+				message = fmt.Sprintf("%s selected %v square", turn, matchData["square"])
+				user.MovedPawn()
 
 			} else {
 				if !user.MaxMove() {
 					user.SendMessageToClient([]byte("you can not remove any pawn"))
 					continue
 				}
+				if match.EmptySquare(matchData["square"]) {
+					conn.WriteMessage(messageType, []byte("there is no pawn in this square"))
+					continue
+				}
 			}
+			match.XPlayer.SendMessageToClient([]byte(message))
+			match.OPlayer.SendMessageToClient([]byte(message))
 		}
 	}
 }
