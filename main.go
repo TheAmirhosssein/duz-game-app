@@ -51,34 +51,58 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				game.JoinGame(matchData["gameId"], *client)
 			}
 		}
-		if messageTypeJson == "move" {
+		if messageTypeJson == "move" || messageTypeJson == "remove" {
 			validKeys := []string{"game_id", "user_id", "square"}
 			matchData, err := messages.ParseMessage(validKeys, message)
 			if err != nil {
 				conn.WriteMessage(messageType, []byte(err.Error()))
-			} else {
-				match, err := game.GetMatch(matchData["gameId"])
-				turn := match.Turn
-				if err != nil {
-					conn.WriteMessage(messageType, []byte(err.Error()))
-				}
-				user, err := game.GetUser(matchData["userId"])
-				if err != nil {
-					conn.WriteMessage(messageType, []byte(err.Error()))
-					break
-				}
+				continue
+			}
+			match, err := game.GetMatch(matchData["gameId"])
+			turn := match.Turn
+			if err != nil {
+				conn.WriteMessage(messageType, []byte(err.Error()))
+				break
+			}
+			user, err := game.GetUser(matchData["userId"])
+			if err != nil {
+				conn.WriteMessage(messageType, []byte(err.Error()))
+				break
+			}
+			turnError := match.CheckUserTurn(*user)
+			if turnError != nil {
+				conn.WriteMessage(messageType, []byte(turnError.Error()))
+				continue
+			}
+			squareNumberError := match.CheckValidSquareNumber(matchData["square"])
+			if squareNumberError != nil {
+				conn.WriteMessage(messageType, []byte(squareNumberError.Error()))
+				continue
+			}
+			squareNumber := match.EmptySquare(matchData["square"])
+			if squareNumber != nil {
+				conn.WriteMessage(messageType, []byte(squareNumber.Error()))
+				continue
+			}
+			if messageTypeJson == "move" {
 				if user.MaxMove() {
 					user.SendMessageToClient([]byte("you can not move any pawn"))
+					continue
+				}
+				err = match.Move(*user, matchData["square"])
+				if err != nil {
+					conn.WriteMessage(messageType, []byte(err.Error()))
 				} else {
-					err = match.Move(*user, matchData["square"])
-					if err != nil {
-						conn.WriteMessage(messageType, []byte(err.Error()))
-					} else {
-						message := fmt.Sprintf("%s selected %v square", turn, matchData["square"])
-						match.XPlayer.SendMessageToClient([]byte(message))
-						match.OPlayer.SendMessageToClient([]byte(message))
-						user.MovedPawn()
-					}
+					message := fmt.Sprintf("%s selected %v square", turn, matchData["square"])
+					match.XPlayer.SendMessageToClient([]byte(message))
+					match.OPlayer.SendMessageToClient([]byte(message))
+					user.MovedPawn()
+				}
+
+			} else {
+				if !user.MaxMove() {
+					user.SendMessageToClient([]byte("you can not remove any pawn"))
+					continue
 				}
 			}
 		}

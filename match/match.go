@@ -58,6 +58,13 @@ func (match *Match) Move(player client.Client, square string) error {
 	return nil
 }
 
+func (match *Match) RemovePawn(player client.Client, square string) error {
+	match.Moves[square] = match.Turn
+	match.changeTurn()
+	match.showMoves()
+	return nil
+}
+
 func (match *Match) getTurnUser() client.Client {
 	if match.Turn == "X" {
 		return *match.XPlayer
@@ -84,4 +91,27 @@ func (match *Match) showMoves() {
 			fmt.Print("\n")
 		}
 	}
+}
+
+func (match *Match) CheckUserTurn(player client.Client) error {
+	turnUser := match.getTurnUser()
+	if turnUser.UserId != player.UserId {
+		return errors.New("it is not your turn")
+	}
+	return nil
+}
+
+func (match *Match) CheckValidSquareNumber(square string) error {
+	squareNumber, err := strconv.ParseInt(square, 10, 0)
+	if err != nil || 1 > squareNumber || squareNumber > 9 {
+		return errors.New("invalid square")
+	}
+	return nil
+}
+
+func (match *Match) EmptySquare(square string) error {
+	if match.Moves[square] != "" {
+		return errors.New("square is not empty")
+	}
+	return nil
 }
