@@ -37,3 +37,7 @@ func (client Client) MaxMove() bool {
 func (client *Client) MovedPawn() {
 	client.PawnOnBoard++
 }
+
+func (client *Client) RemovedPawn() {
+	client.PawnOnBoard--
+}

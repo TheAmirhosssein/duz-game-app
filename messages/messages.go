@@ -7,7 +7,7 @@ import (
 )
 
 func isValidType(checkType string) bool {
-	validTypes := [2]string{"join_match", "move"}
+	validTypes := [3]string{"join_match", "move", "remove"}
 	for _, validType := range validTypes {
 		if checkType == validType {
 			return true
