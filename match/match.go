@@ -16,9 +16,13 @@ type Match struct {
 }
 
 func New(player client.Client) *Match {
+	moves := make(map[string]string)
+	for counter := 1; counter <= 9; counter++ {
+		moves[fmt.Sprint(counter)] = ""
+	}
 	match := Match{
 		Turn:  "X",
-		Moves: make(map[string]string),
+		Moves: moves,
 	}
 	if playerIcon() == "X" {
 		match.XPlayer = &player
