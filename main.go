@@ -110,6 +110,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				user.RemovedPawn()
 				message = fmt.Sprintf("%s removed %v square", turn, matchData["square"])
 			}
+			fmt.Println(match.IsGameOverColumn())
 			match.XPlayer.SendMessageToClient([]byte(message))
 			match.OPlayer.SendMessageToClient([]byte(message))
 		}
