@@ -125,3 +125,24 @@ func (match Match) IsGameOverColumn() bool {
 	}
 	return false
 }
+
+func (match Match) IsGameOverRow() bool {
+	squares := [][]string{{"1", "2", "3"}, {"4", "5", "6"}, {"7", "8", "9"}}
+	for _, row := range squares {
+		gameOver := true
+		firstSquareValue := match.Moves[row[0]]
+		if firstSquareValue != "" {
+
+			for _, square := range row {
+				if match.Moves[square] != firstSquareValue {
+					gameOver = false
+					break
+				}
+			}
+			if gameOver {
+				return true
+			}
+		}
+	}
+	return false
+}

@@ -111,6 +111,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				message = fmt.Sprintf("%s removed %v square", turn, matchData["square"])
 			}
 			fmt.Println(match.IsGameOverColumn())
+			fmt.Println(match.IsGameOverRow())
 			match.XPlayer.SendMessageToClient([]byte(message))
 			match.OPlayer.SendMessageToClient([]byte(message))
 		}
