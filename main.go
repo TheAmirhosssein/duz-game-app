@@ -92,7 +92,10 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				match.Move(matchData["square"])
 				message = fmt.Sprintf("%s selected %v square", turn, matchData["square"])
 				user.MovedPawn()
-
+				if match.IsGameOverColumn() || match.IsGameOverRow() || match.IsGameOverDiagonal() {
+					conn.WriteMessage(messageType, []byte(fmt.Sprintf("GameOver, %v Won", turn)))
+					break
+				}
 			} else {
 				if !user.MaxMove() {
 					user.SendMessageToClient([]byte("you can not remove any pawn"))
@@ -110,8 +113,6 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				user.RemovedPawn()
 				message = fmt.Sprintf("%s removed %v square", turn, matchData["square"])
 			}
-			fmt.Println(match.IsGameOverColumn())
-			fmt.Println(match.IsGameOverRow())
 			match.XPlayer.SendMessageToClient([]byte(message))
 			match.OPlayer.SendMessageToClient([]byte(message))
 		}

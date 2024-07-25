@@ -132,7 +132,6 @@ func (match Match) IsGameOverRow() bool {
 		gameOver := true
 		firstSquareValue := match.Moves[row[0]]
 		if firstSquareValue != "" {
-
 			for _, square := range row {
 				if match.Moves[square] != firstSquareValue {
 					gameOver = false
@@ -143,6 +142,20 @@ func (match Match) IsGameOverRow() bool {
 				return true
 			}
 		}
+	}
+	return false
+}
+
+func (match Match) IsGameOverDiagonal() bool {
+	centerSquare := match.Moves["5"]
+	if centerSquare == "" {
+		return false
+	}
+	if centerSquare == match.Moves["7"] && match.Moves["7"] == match.Moves["3"] {
+		return true
+	}
+	if centerSquare == match.Moves["9"] && match.Moves["7"] == match.Moves["1"] {
+		return true
 	}
 	return false
 }
