@@ -110,15 +110,17 @@ func (match *Match) CheckValidRemove(square string) bool {
 func (match Match) IsGameOverColumn() bool {
 	for counter := 1; counter <= 3; counter++ {
 		lastSign := match.Moves[fmt.Sprint(counter)]
-		gameOver := true
-		for squareIterator := counter; squareIterator <= counter+6; squareIterator += 3 {
-			if match.Moves[fmt.Sprint(squareIterator)] != lastSign {
-				gameOver = false
-				break
+		if lastSign != "" {
+			gameOver := true
+			for squareIterator := counter; squareIterator <= counter+6; squareIterator += 3 {
+				if match.Moves[fmt.Sprint(squareIterator)] != lastSign {
+					gameOver = false
+					break
+				}
 			}
-		}
-		if gameOver {
-			return true
+			if gameOver {
+				return true
+			}
 		}
 	}
 	return false
