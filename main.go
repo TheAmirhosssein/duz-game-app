@@ -119,8 +119,13 @@ func echo(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func serveHome(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "index.html")
+}
+
 func main() {
-	http.HandleFunc("/", echo)
+	http.HandleFunc("/ws/", echo)
+	http.HandleFunc("/", serveHome)
 	fmt.Println("listening on localhost:8080")
 	log.Fatal(http.ListenAndServe("0.0.0.0:8080", nil))
 }
