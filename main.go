@@ -120,12 +120,15 @@ func echo(w http.ResponseWriter, r *http.Request) {
 }
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "index.html")
+	http.ServeFile(w, r, "templates/index.html")
 }
 
 func main() {
 	http.HandleFunc("/ws/", echo)
-	http.HandleFunc("/", serveHome)
 	fmt.Println("listening on localhost:8080")
+	staticDir := "./static"
+	fs := http.FileServer(http.Dir(staticDir))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	http.HandleFunc("/", serveHome)
 	log.Fatal(http.ListenAndServe("0.0.0.0:8080", nil))
 }

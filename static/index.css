@@ -1,0 +1,86 @@
+@font-face {
+    font-family: "myIranYekan";
+    font-weight: normal;
+    src: url('font/iranyekan/ttf/iranyekanwebbold.ttf')format('ttf') url('font/iranyekan/woff2/iranyekanwebbold.woff2') format('woff2'),
+        url('font/iranyekan/woff/iranyekanwebbold.woff') format('woff'),
+        url('font/iranyekan/svg/iranyekanwebbold.svg') format('svg');
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "myIranYekan";
+    user-select: none;
+}
+
+body {
+    margin: 0;
+    font: normal 75% Arial, Helvetica, sans-serif;
+}
+
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(34, 40, 49);
+    background-image: url("");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    z-index: -100;
+    position: fixed;
+    bottom: 0;
+
+
+
+}
+
+
+
+#user {
+    /* border: 2px solid red; */
+    margin: 20px auto 0;
+    display: flex;
+    width: 400px;
+    height: 35px;
+    column-gap: 45%;
+    justify-content: center;
+
+}
+
+#user span,
+input {
+    padding: 5px;
+    text-align: center;
+
+}
+
+#user span {
+    font-size: 20px;
+    color: aliceblue;
+    font-family: "myIranYekan";
+}
+
+#all_picture {
+    /* border: 2px solid blue; */
+    height: 400px;
+    width: 500px;
+    margin: 50px auto 0;
+    display: flex;
+    column-gap: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.images {
+    border: 2px solid rgb(49, 54, 63);
+    height: 130px;
+    width: 130px;
+
+}
