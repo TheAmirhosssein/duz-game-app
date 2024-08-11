@@ -1,5 +1,7 @@
-// 1. Create a WebSocket connection
 const socket = new WebSocket('ws://127.0.0.1:8080/ws/');
+const urlParams = new URLSearchParams(window.location.search);
+const userId = urlParams.get('user_id');
+const gameId = urlParams.get('game_id');
 
 socket.addEventListener('open', function (event) {
     console.log('WebSocket connection opened');
@@ -7,7 +9,10 @@ socket.addEventListener('open', function (event) {
 });
 
 socket.addEventListener('message', function (event) {
-    console.log('Message from server:', event.data);
+    message = JSON.parse(event.data)
+    if (message.game_id == gameId) {
+        console.log(message)
+    }
 });
 
 socket.addEventListener('close', function (event) {
@@ -18,7 +23,6 @@ socket.addEventListener('error', function (event) {
     console.error('WebSocket error:', event);
 });
 
-// 3. Send messages
 function sendMessage(message) {
     if (socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify(message));
@@ -27,9 +31,6 @@ function sendMessage(message) {
     }
 }
 
-const urlParams = new URLSearchParams(window.location.search);
-const userId = urlParams.get('user_id');
-const gameId = urlParams.get('game_id');
 
 function startGame() {
     if (userId !== null && gameId !== null) {
