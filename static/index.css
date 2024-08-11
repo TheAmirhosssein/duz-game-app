@@ -39,7 +39,7 @@ body {
 
 
 
-#user {
+.user {
     /* border: 2px solid red; */
     margin: 20px auto 0;
     display: flex;
@@ -50,14 +50,14 @@ body {
 
 }
 
-#user span,
+.user span,
 input {
     padding: 5px;
     text-align: center;
 
 }
 
-#user span {
+.user span {
     font-size: 20px;
     color: aliceblue;
     font-family: "myIranYekan";

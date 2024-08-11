@@ -41,6 +41,11 @@ function startGame() {
         }
         sendMessage(startGameData)
     }
+    let hiddenItems = document.getElementsByClassName("hide");
+    [...hiddenItems].forEach(element => {
+        element.classList.remove("hide");
+    });
+    document.getElementById("start").classList.add("hide")
 }
 
 // 4. Close the WebSocket connection
