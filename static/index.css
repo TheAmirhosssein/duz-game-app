@@ -84,3 +84,7 @@ input {
     width: 130px;
 
 }
+
+.hide{
+    display: none!important;
+}
