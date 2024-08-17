@@ -3,11 +3,11 @@ const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get('user_id');
 const gameId = urlParams.get('game_id');
 const username = urlParams.get('username');
+let isUserTurn
 
 socket.addEventListener('open', function (event) {
-    console.log('WebSocket connection opened');
-    socket.send('Hello Server!');
-});
+    console.log('WebSocket conection opened');
+}); n
 
 socket.addEventListener('message', function (event) {
     message = JSON.parse(event.data)
@@ -63,6 +63,7 @@ function changeTurn(turn) {
         turnText = "نوبت حریف"
     } else {
         turnText = "نوبت شما"
+        isUserTurn = true
     }
     document.getElementById("turn").innerHTML = turnText
 }
