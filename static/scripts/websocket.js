@@ -2,6 +2,7 @@ const socket = new WebSocket('ws://127.0.0.1:8080/ws/');
 const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get('user_id');
 const gameId = urlParams.get('game_id');
+const username = urlParams.get('username');
 
 socket.addEventListener('open', function (event) {
     console.log('WebSocket connection opened');
@@ -46,6 +47,7 @@ function startGame() {
         element.classList.remove("hide");
     });
     document.getElementById("start").classList.add("hide")
+    document.getElementById("playerName").innerHTML = username
 }
 
 // 4. Close the WebSocket connection
