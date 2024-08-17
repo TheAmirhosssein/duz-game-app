@@ -29,7 +29,6 @@ func New(player client.Client) *Match {
 	} else {
 		match.OPlayer = &player
 	}
-	(&player).SendMessageToClient([]byte("waiting for your opponent to become ready"))
 	return &match
 }
 
@@ -39,9 +38,6 @@ func (match *Match) SetSecondPlayer(player client.Client) {
 	} else {
 		match.XPlayer = &player
 	}
-	message := "game started and your sign is "
-	match.OPlayer.SendMessageToClient([]byte(message + "O"))
-	match.XPlayer.SendMessageToClient([]byte(message + "X"))
 }
 
 func (match *Match) Move(square string) {
@@ -91,6 +87,14 @@ func (match *Match) CheckUserTurn(player client.Client) error {
 	return nil
 }
 
+func (match Match) GetUserSign(player *client.Client) string {
+	if match.XPlayer.UserId == player.UserId {
+		return "X"
+	} else {
+		return "O"
+	}
+}
+
 func (match *Match) CheckValidSquareNumber(square string) error {
 	squareNumber, err := strconv.ParseInt(square, 10, 0)
 	if err != nil || 1 > squareNumber || squareNumber > 9 {
@@ -105,6 +109,10 @@ func (match *Match) EmptySquare(square string) bool {
 
 func (match *Match) CheckValidRemove(square string) bool {
 	return match.Moves[square] == match.Turn
+}
+
+func (match Match) IsGameReady() bool {
+	return match.XPlayer != nil && match.OPlayer != nil
 }
 
 func (match Match) IsGameOverColumn() bool {

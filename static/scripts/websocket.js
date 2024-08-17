@@ -13,6 +13,9 @@ socket.addEventListener('message', function (event) {
     message = JSON.parse(event.data)
     if (message.game_id == gameId) {
         console.log(message)
+        if (message.type == "join_game") {
+            changeTurn(message.message.user_sign)
+        }
     }
 });
 
@@ -50,7 +53,16 @@ function startGame() {
     document.getElementById("playerName").innerHTML = username
 }
 
-// 4. Close the WebSocket connection
 function closeConnection() {
     socket.close();
+}
+
+function changeTurn(turn) {
+    let turnText
+    if (turn == "O") {
+        turnText = "نوبت حریف"
+    } else {
+        turnText = "نوبت شما"
+    }
+    document.getElementById("turn").innerHTML = turnText
 }

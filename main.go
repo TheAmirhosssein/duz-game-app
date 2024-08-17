@@ -49,6 +49,14 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				client := client.New(id, matchData["userId"], conn)
 				game.RegisterUser(*client)
 				game.JoinGame(matchData["gameId"], *client)
+				match, err := game.GetMatch(matchData["gameId"])
+				if err != nil {
+					conn.WriteMessage(messageType, []byte(err.Error()))
+					break
+				}
+				jsonMessage := map[string]any{"user_sign": match.GetUserSign(client), "is_game_ready": match.IsGameReady()}
+				userMessage := messages.GenerateMessage("join_game", matchData["userId"], matchData["gameId"], jsonMessage)
+				client.SendMessageToClient(userMessage)
 			}
 		}
 		if messageTypeJson == "move" || messageTypeJson == "remove" {

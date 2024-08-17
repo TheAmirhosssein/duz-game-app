@@ -66,7 +66,7 @@ func ParseMessage(validKeys []string, message []byte) (map[string]string, error)
 	return result, nil
 }
 
-func GenerateMessage(messageType, userId, gameId string, message any) []byte {
+func GenerateMessage(messageType, userId, gameId string, message map[string]any) []byte {
 	generatedMessage := map[string]any{"type": messageType, "user_id": userId, "message": message, "game_id": gameId}
 	serializedMessage, _ := json.Marshal(generatedMessage)
 	return serializedMessage
