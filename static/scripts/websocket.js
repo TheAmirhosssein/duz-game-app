@@ -74,17 +74,20 @@ function changeTurn() {
 }
 
 
-function handleClick(event) {
+function move(event) {
     counter++;
+    if (!isUserTurn) {
+        alert("نوبت شما نیست")
+    } else {
+        if (event.target.getAttribute('src') === "/static/img/3.png") {
 
-    if (event.target.getAttribute('src') === "/static/img/3.png") {
+            var snd = new Audio("/static/Voice/add.mp3");
+            snd.play();
 
-        var snd = new Audio("/static/Voice/add.mp3");
-        snd.play();
-
-        if (multiplication < 3) {
-            event.target.setAttribute('src', "/static/img/2.png");
-            multiplication++;
+            if (multiplication < 3) {
+                event.target.setAttribute('src', "/static/img/2.png");
+                multiplication++;
+            }
         }
     }
 }
@@ -102,5 +105,5 @@ function handleDoubleClick(event) {
 const images = document.querySelectorAll('.images');
 
 images.forEach(function (image) {
-    image.addEventListener('click', handleClick);
+    image.addEventListener('click', move);
 });
