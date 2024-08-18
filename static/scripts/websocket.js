@@ -95,7 +95,6 @@ function move(event) {
         alert("شما نمی توانید حرکتی انجام بدهید")
         return null
     }
-    console.log(counter);
 
     const classList = event.target.classList;
     const emptySquare = "empty-square"
@@ -116,6 +115,8 @@ function move(event) {
         }
         sendMessage(moveData)
         changeTurn()
+    } else {
+        alert("این خانه خالی نیست")
     }
 
 }
