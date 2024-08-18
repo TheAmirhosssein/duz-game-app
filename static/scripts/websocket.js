@@ -14,14 +14,17 @@ socket.addEventListener('open', function (event) {
 
 socket.addEventListener('message', function (event) {
     message = JSON.parse(event.data)
-    if (message.game_id == gameId) {
+    if (message.game_id === gameId) {
         console.log(message)
-        if (message.type == "join_game") {
+        if (message.type === "join_game") {
             userSign = message.message.user_sign
             changeTurn()
         }
-        if (message.type == "move") {
+        if (message.type === "move") {
             document.getElementById(message.message.square).classList.add(`${message.message.sign}-sign`)
+        }
+        if (message.type === "error" && message.user_id === userId) {
+            alert(message.message.error)
         }
     }
 });

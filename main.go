@@ -79,7 +79,9 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			}
 			turnError := match.CheckUserTurn(*user)
 			if turnError != nil {
-				conn.WriteMessage(messageType, []byte(turnError.Error()))
+				info := map[string]any{"error": turnError.Error()}
+				message := string(messages.GenerateMessage("error", matchData["userId"], matchData["gameId"], info))
+				conn.WriteMessage(messageType, []byte(message))
 				continue
 			}
 			squareNumberError := match.CheckValidSquareNumber(matchData["square"])
@@ -90,11 +92,15 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			var message string
 			if messageTypeJson == "move" {
 				if !match.EmptySquare(matchData["square"]) {
-					conn.WriteMessage(messageType, []byte("square is not empty"))
+					info := map[string]any{"error": "square is not empty"}
+					message = string(messages.GenerateMessage("error", matchData["userId"], matchData["gameId"], info))
+					conn.WriteMessage(messageType, []byte(message))
 					continue
 				}
 				if user.MaxMove() {
-					user.SendMessageToClient([]byte("you can not move any pawn"))
+					info := map[string]any{"error": "you can not move any pawn"}
+					message = string(messages.GenerateMessage("error", matchData["userId"], matchData["gameId"], info))
+					conn.WriteMessage(messageType, []byte(message))
 					continue
 				}
 				match.Move(matchData["square"])
