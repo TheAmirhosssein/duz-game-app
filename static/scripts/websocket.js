@@ -91,7 +91,12 @@ function move(event) {
         return null
     }
 
-    counter++;
+    if (counter === 3) {
+        alert("شما نمی توانید حرکتی انجام بدهید")
+        return null
+    }
+    console.log(counter);
+
     const classList = event.target.classList;
     const emptySquare = "empty-square"
     const signClass = `${userSign}-sign`
