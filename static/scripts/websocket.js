@@ -18,10 +18,17 @@ socket.addEventListener('message', function (event) {
         console.log(message)
         if (message.type === "join_game") {
             userSign = message.message.user_sign
+            if (userSign === "X") {
+                isUserTurn = true
+            }
             changeTurn()
         }
         if (message.type === "move") {
             document.getElementById(message.message.square).classList.add(`${message.message.sign}-sign`)
+            if (message.user_id !== userId) {
+                isUserTurn = true
+                changeTurn()
+            }
         }
         if (message.type === "error" && message.user_id === userId) {
             alert(message.message.error)
@@ -69,12 +76,10 @@ function closeConnection() {
 
 function changeTurn() {
     let turnText
-    if (userSign == "O") {
+    if (!isUserTurn) {
         turnText = "نوبت حریف"
-        isUserTurn = false
     } else {
         turnText = "نوبت شما"
-        isUserTurn = true
     }
     document.getElementById("turn").innerHTML = turnText
 }
@@ -92,6 +97,7 @@ function move(event) {
     const signClass = `${userSign}-sign`
 
     if (classList.contains(emptySquare)) {
+        isUserTurn = false
         var snd = new Audio("/static/Voice/add.mp3");
         snd.play();
         event.target.classList.add(signClass);
@@ -104,6 +110,7 @@ function move(event) {
             square: event.target.id,
         }
         sendMessage(moveData)
+        changeTurn()
     }
 
 }
