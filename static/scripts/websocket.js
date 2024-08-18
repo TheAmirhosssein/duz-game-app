@@ -25,10 +25,15 @@ socket.addEventListener('message', function (event) {
         }
         if (message.type === "move") {
             document.getElementById(message.message.square).classList.add(`${message.message.sign}-sign`)
+            document.getElementById(message.message.square).classList.remove(`empty-square`)
             if (message.user_id !== userId) {
                 isUserTurn = true
                 changeTurn()
             }
+        }
+        if (message.type === "remove") {
+            document.getElementById(message.message.square).classList.remove(`${message.message.sign}-sign`)
+            document.getElementById(message.message.square).classList.add(`empty-square`)
         }
         if (message.type === "error" && message.user_id === userId) {
             alert(message.message.error)
@@ -121,18 +126,42 @@ function move(event) {
 
 }
 
-function handleDoubleClick(event) {
-    var snd = new Audio("/static/Voice/delete.mp3");
-    snd.play();
+function remove(event) {
+    if (!isUserTurn) {
+        alert("نوبت شما نیست")
+        return null
+    }
 
-    if (event.target.getAttribute('src') === "/static/img/2.png") {
-        multiplication--;
-        event.target.setAttribute('src', "/static/img/3.png");
+    if (counter !== 3) {
+        alert("شما نمی توانید این مهره را حذف کنید")
+        return null
+    }
+
+    const classList = event.target.classList;
+    const emptySquare = "empty-square"
+    const signClass = `${userSign}-sign`
+
+    if (classList.contains(signClass)) {
+        var snd = new Audio("/static/Voice/delete.mp3");
+        snd.play();
+        event.target.classList.add(emptySquare);
+        event.target.classList.remove(signClass);
+        counter--;
+        var moveData = {
+            type: "remove",
+            game_id: gameId,
+            user_id: userId,
+            square: event.target.id,
+        }
+        sendMessage(moveData)
+    } else {
+        alert("این خانه برای شما نیست")
     }
 }
 
 const squares = document.querySelectorAll('.square');
 
 squares.forEach(function (square) {
+    square.addEventListener('dblclick', remove);
     square.addEventListener('click', move);
 });

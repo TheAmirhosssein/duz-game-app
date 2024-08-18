@@ -113,20 +113,27 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				}
 			} else {
 				if !user.MaxMove() {
-					user.SendMessageToClient([]byte("you can not remove any pawn"))
+					info := map[string]any{"error": "you can not remove any pawn"}
+					message = string(messages.GenerateMessage("error", matchData["userId"], matchData["gameId"], info))
+					user.SendMessageToClient([]byte(message))
 					continue
 				}
 				if match.EmptySquare(matchData["square"]) {
-					conn.WriteMessage(messageType, []byte("there is no pawn in this square"))
+					info := map[string]any{"error": "there is no pawn in this square"}
+					message = string(messages.GenerateMessage("error", matchData["userId"], matchData["gameId"], info))
+					conn.WriteMessage(messageType, []byte(message))
 					continue
 				}
 				if !match.CheckValidRemove(matchData["square"]) {
-					conn.WriteMessage(messageType, []byte("this square is for your opponent"))
+					info := map[string]any{"error": "this square is for your opponent"}
+					message = string(messages.GenerateMessage("error", matchData["userId"], matchData["gameId"], info))
+					conn.WriteMessage(messageType, []byte(message))
 					continue
 				}
 				match.RemovePawn(matchData["square"])
 				user.RemovedPawn()
-				message = fmt.Sprintf("%s removed %v square", turn, matchData["square"])
+				info := map[string]any{"square": matchData["square"], "sign": turn}
+				message = string(messages.GenerateMessage("remove", matchData["userId"], matchData["gameId"], info))
 			}
 			match.XPlayer.SendMessageToClient([]byte(message))
 			match.OPlayer.SendMessageToClient([]byte(message))
