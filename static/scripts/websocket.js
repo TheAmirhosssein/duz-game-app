@@ -7,7 +7,7 @@ let isUserTurn
 
 socket.addEventListener('open', function (event) {
     console.log('WebSocket conection opened');
-}); n
+});
 
 socket.addEventListener('message', function (event) {
     message = JSON.parse(event.data)

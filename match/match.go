@@ -88,7 +88,8 @@ func (match *Match) CheckUserTurn(player client.Client) error {
 }
 
 func (match Match) GetUserSign(player *client.Client) string {
-	if match.XPlayer.UserId == player.UserId {
+	xPlayer := match.XPlayer
+	if xPlayer != nil && xPlayer.UserId == player.UserId {
 		return "X"
 	} else {
 		return "O"
