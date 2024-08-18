@@ -20,6 +20,9 @@ socket.addEventListener('message', function (event) {
             userSign = message.message.user_sign
             changeTurn()
         }
+        if (message.type == "move") {
+            document.getElementById(message.message.square).classList.add(`${message.message.sign}-sign`)
+        }
     }
 });
 
@@ -91,6 +94,13 @@ function move(event) {
         event.target.classList.add(signClass);
         event.target.classList.remove(emptySquare);
         counter++;
+        var moveData = {
+            type: "move",
+            game_id: gameId,
+            user_id: userId,
+            square: event.target.id,
+        }
+        sendMessage(moveData)
     }
 
 }

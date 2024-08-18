@@ -98,7 +98,8 @@ func echo(w http.ResponseWriter, r *http.Request) {
 					continue
 				}
 				match.Move(matchData["square"])
-				message = fmt.Sprintf("%s selected %v square", turn, matchData["square"])
+				info := map[string]any{"square": matchData["square"], "sign": turn}
+				message = string(messages.GenerateMessage("move", matchData["userId"], matchData["gameId"], info))
 				user.MovedPawn()
 				if match.IsGameOverColumn() || match.IsGameOverRow() || match.IsGameOverDiagonal() {
 					conn.WriteMessage(messageType, []byte(fmt.Sprintf("GameOver, %v Won", turn)))
