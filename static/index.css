@@ -89,12 +89,12 @@ input {
     background-size: cover;
 }
 
-.o-sign{
+.O-sign{
     background-image: url('/static/img/O.png')!important;
     background-size: cover;
 }
 
-.x-sign{
+.X-sign{
     background-image: url('/static/img/X.png')!important;
     background-size: cover;
 }

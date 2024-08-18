@@ -75,21 +75,24 @@ function changeTurn() {
 
 
 function move(event) {
-    counter++;
     if (!isUserTurn) {
         alert("نوبت شما نیست")
-    } else {
-        if (event.target.getAttribute('src') === "/static/img/3.png") {
-
-            var snd = new Audio("/static/Voice/add.mp3");
-            snd.play();
-
-            if (multiplication < 3) {
-                event.target.setAttribute('src', "/static/img/2.png");
-                multiplication++;
-            }
-        }
+        return null
     }
+
+    counter++;
+    const classList = event.target.classList;
+    const emptySquare = "empty-square"
+    const signClass = `${userSign}-sign`
+
+    if (classList.contains(emptySquare)) {
+        var snd = new Audio("/static/Voice/add.mp3");
+        snd.play();
+        event.target.classList.add(signClass);
+        event.target.classList.remove(emptySquare);
+        counter++;
+    }
+
 }
 
 function handleDoubleClick(event) {
@@ -102,8 +105,8 @@ function handleDoubleClick(event) {
     }
 }
 
-const images = document.querySelectorAll('.images');
+const squares = document.querySelectorAll('.square');
 
-images.forEach(function (image) {
-    image.addEventListener('click', move);
+squares.forEach(function (square) {
+    square.addEventListener('click', move);
 });
