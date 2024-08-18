@@ -78,11 +78,25 @@ input {
 
 }
 
-.images {
+.square {
     border: 2px solid rgb(49, 54, 63);
     height: 130px;
     width: 130px;
+}
 
+.empty-square{
+    background-image: url('/static/img/3.png')!important;
+    background-size: cover;
+}
+
+.o-sign{
+    background-image: url('/static/img/O.png')!important;
+    background-size: cover;
+}
+
+.x-sign{
+    background-image: url('/static/img/X.png')!important;
+    background-size: cover;
 }
 
 .hide{
