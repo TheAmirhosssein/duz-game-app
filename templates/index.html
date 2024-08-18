@@ -41,65 +41,6 @@
     <div class="user" id="start">
         <button onclick="startGame()" class="btn btn-secondary">شروع بازی</button>
     </div>
-
-
-
-    <script src="/static/scripts/jquery-3.7.1.min.js"></script>
-
-    <script>
-
-
-        let circle = 0
-        let multiplication = 0
-        let counter = 0
-
-
-
-
-
-        $('.images').click(function () {
-            counter++
-            // if (counter < 7) {
-            if ($(this).attr('src') === "/static/img/3.png") {
-
-                var snd = new Audio("/static/Voice/add.mp3");
-                snd.play();
-
-
-                if (counter % 2 === 0) {
-                    if (multiplication < 3) {
-                        $(this).attr('src', "/static/img/2.png")
-                        multiplication++
-                    }
-                }
-                else {
-                    if (circle < 3) {
-
-                        $(this).attr('src', "/static/img/1.png")
-                        circle++
-                    }
-                }
-            }
-
-            // }
-
-        })
-        $('.images').dblclick(function () {
-
-            var snd = new Audio("/static/Voice/delete.mp3");
-            snd.play();
-
-            if ($(this).attr('src') === "/static//img/2.png") {
-                multiplication--
-                $(this).attr('src', "/static/img/3.png")
-            }
-            if ($(this).attr('src') === "/static/img/1.png") {
-                circle--
-                $(this).attr('src', "/static/img/3.png")
-            }
-        })
-    </script>
-
     </div>
 </body>
 <script src="/static/scripts/particles.min.js"></script>

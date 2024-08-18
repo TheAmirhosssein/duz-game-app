@@ -3,7 +3,10 @@ const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get('user_id');
 const gameId = urlParams.get('game_id');
 const username = urlParams.get('username');
-let isUserTurn
+let isUserTurn = false;
+let userSign = "";
+let counter = 0;
+let multiplication = 0;
 
 socket.addEventListener('open', function (event) {
     console.log('WebSocket conection opened');
@@ -14,7 +17,8 @@ socket.addEventListener('message', function (event) {
     if (message.game_id == gameId) {
         console.log(message)
         if (message.type == "join_game") {
-            changeTurn(message.message.user_sign)
+            userSign = message.message.user_sign
+            changeTurn()
         }
     }
 });
@@ -57,13 +61,46 @@ function closeConnection() {
     socket.close();
 }
 
-function changeTurn(turn) {
+function changeTurn() {
     let turnText
-    if (turn == "O") {
+    if (userSign == "O") {
         turnText = "نوبت حریف"
+        isUserTurn = false
     } else {
         turnText = "نوبت شما"
         isUserTurn = true
     }
     document.getElementById("turn").innerHTML = turnText
 }
+
+
+function handleClick(event) {
+    counter++;
+
+    if (event.target.getAttribute('src') === "/static/img/3.png") {
+
+        var snd = new Audio("/static/Voice/add.mp3");
+        snd.play();
+
+        if (multiplication < 3) {
+            event.target.setAttribute('src', "/static/img/2.png");
+            multiplication++;
+        }
+    }
+}
+
+function handleDoubleClick(event) {
+    var snd = new Audio("/static/Voice/delete.mp3");
+    snd.play();
+
+    if (event.target.getAttribute('src') === "/static/img/2.png") {
+        multiplication--;
+        event.target.setAttribute('src', "/static/img/3.png");
+    }
+}
+
+const images = document.querySelectorAll('.images');
+
+images.forEach(function (image) {
+    image.addEventListener('click', handleClick);
+});
