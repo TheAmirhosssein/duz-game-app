@@ -163,7 +163,7 @@ func (match Match) IsGameOverDiagonal() bool {
 	if centerSquare == match.Moves["7"] && match.Moves["7"] == match.Moves["3"] {
 		return true
 	}
-	if centerSquare == match.Moves["9"] && match.Moves["7"] == match.Moves["1"] {
+	if centerSquare == match.Moves["9"] && match.Moves["9"] == match.Moves["1"] {
 		return true
 	}
 	return false
