@@ -97,7 +97,6 @@ function move(event) {
     }
 
     if (counter === 3) {
-        alert("شما نمی توانید حرکتی انجام بدهید")
         return null
     }
 

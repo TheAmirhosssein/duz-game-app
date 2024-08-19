@@ -87,6 +87,10 @@ input {
 .empty-square{
     background-image: url('/static/img/3.png')!important;
     background-size: cover;
+    display: flex;
+    justify-content: center; /* Centers the image horizontally */
+    align-items: center;
+    
 }
 
 .O-sign{
@@ -101,4 +105,14 @@ input {
 
 .hide{
     display: none!important;
+}
+
+.delete-button{
+    max-width: 25%;
+    max-height: 25%;
+    display: none;
+}
+
+.square.empty-square:hover img {
+    display: block;
 }
