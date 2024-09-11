@@ -38,6 +38,10 @@ socket.addEventListener('message', function (event) {
         if (message.type === "error" && message.user_id === userId) {
             alert(message.message.error)
         }
+        if (message.type === "game_over") {
+            let winner = message.message.winner
+            alert("winner is: " + winner)
+        }
     }
 });
 

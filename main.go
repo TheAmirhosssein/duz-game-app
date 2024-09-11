@@ -107,10 +107,6 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				info := map[string]any{"square": matchData["square"], "sign": turn}
 				message = string(messages.GenerateMessage("move", matchData["userId"], matchData["gameId"], info))
 				user.MovedPawn()
-				if match.IsGameOverColumn() || match.IsGameOverRow() || match.IsGameOverDiagonal() {
-					conn.WriteMessage(messageType, []byte(fmt.Sprintf("GameOver, %v Won", turn)))
-					break
-				}
 			} else {
 				if !user.MaxMove() {
 					info := map[string]any{"error": "you can not remove any pawn"}
@@ -137,6 +133,13 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			}
 			match.XPlayer.SendMessageToClient([]byte(message))
 			match.OPlayer.SendMessageToClient([]byte(message))
+			if match.IsGameOverColumn() || match.IsGameOverRow() || match.IsGameOverDiagonal() {
+				info := map[string]any{"winner": turn}
+				message = string(messages.GenerateMessage("game_over", matchData["userId"], matchData["gameId"], info))
+				match.XPlayer.SendMessageToClient([]byte(message))
+				match.OPlayer.SendMessageToClient([]byte(message))
+				break
+			}
 		}
 	}
 }
@@ -152,5 +155,5 @@ func main() {
 	fs := http.FileServer(http.Dir(staticDir))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	http.HandleFunc("/", serveHome)
-	log.Fatal(http.ListenAndServe("0.0.0.0:8080", nil))
+	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
